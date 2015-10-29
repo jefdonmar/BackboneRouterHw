@@ -1,7 +1,81 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-"use strict";
+'use strict';
 
-},{}],2:[function(require,module,exports){
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+var _jquery = require('jquery');
+
+var _jquery2 = _interopRequireDefault(_jquery);
+
+var APP_ID = 'IWlk5V6iUTGc19BvEwm8n9A0HM9XhEjzp4akYGHJ';
+var API_KEY = '623gYPjh8AEFCGMaGWowTmpz3GiboYKsYygu75tm';
+
+_jquery2['default'].ajaxSetup({
+  headers: {
+    'X-Parse-Application-Id': APP_ID,
+    'X-Parse-REST-API-KEY': API_KEY
+
+  }
+
+});
+
+},{"jquery":9}],2:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+var _backbone = require('backbone');
+
+var _backbone2 = _interopRequireDefault(_backbone);
+
+var _cartoon_model = require('./cartoon_model');
+
+var _cartoon_model2 = _interopRequireDefault(_cartoon_model);
+
+var CartoonCollection = _backbone2['default'].Collection.extend({
+
+  url: 'https://api.parse.com/1/classes/cartoonList',
+
+  model: _cartoon_model2['default'],
+
+  parse: function parse(data) {
+    return data.results;
+  }
+
+});
+
+exports['default'] = CartoonCollection;
+module.exports = exports['default'];
+
+},{"./cartoon_model":3,"backbone":8}],3:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+var _backbone = require('backbone');
+
+var _backbone2 = _interopRequireDefault(_backbone);
+
+var CartoonModel = _backbone2['default'].Model.extend({
+
+  urlRoot: 'https://api.parse.com/1/classes/cartoonList',
+
+  idAttribute: 'objectId'
+
+});
+
+exports['default'] = CartoonModel;
+module.exports = exports['default'];
+
+},{"backbone":8}],4:[function(require,module,exports){
 'use strict';
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
@@ -24,15 +98,23 @@ var _router2 = _interopRequireDefault(_router);
 
 require('./ajax_setup');
 
+var _cartoon_collection = require('./cartoon_collection');
+
+var _cartoon_collection2 = _interopRequireDefault(_cartoon_collection);
+
 console.log('Hello, World');
 
 var appElement = (0, _jquery2['default'])('.app');
 
-var router = new _router2['default']();
+var router = new _router2['default'](appElement);
 router.start();
 
-},{"./ajax_setup":1,"./router":3,"jquery":5,"moment":6,"underscore":7}],3:[function(require,module,exports){
+},{"./ajax_setup":1,"./cartoon_collection":2,"./router":5,"jquery":9,"moment":10,"underscore":11}],5:[function(require,module,exports){
 'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
@@ -40,23 +122,136 @@ var _backbone = require('backbone');
 
 var _backbone2 = _interopRequireDefault(_backbone);
 
-var Router = _backbone2['default'].router.extend({
+var _jquery = require('jquery');
 
-  // start: function() {
-  //   Backbone.history.start();
-  // }
+var _jquery2 = _interopRequireDefault(_jquery);
 
-  // routes: {
-  //   "about" : "showAbout"
+var _cartoon_collection = require('./cartoon_collection');
+
+var _cartoon_collection2 = _interopRequireDefault(_cartoon_collection);
+
+var _viewsCartoon_list = require('./views/cartoon_list');
+
+var _viewsCartoon_list2 = _interopRequireDefault(_viewsCartoon_list);
+
+var _viewsIndividual_view = require('./views/individual_view');
+
+var _viewsIndividual_view2 = _interopRequireDefault(_viewsIndividual_view);
+
+var Router = _backbone2['default'].Router.extend({
+
+  routes: {
+    '': 'cartoonlist',
+    'individualView/:id': 'showIndividualCartoon'
+  },
+
+  initialize: function initialize(appElement) {
+    this.$el = appElement;
+
+    this.cartoons = new _cartoon_collection2['default']();
+
+    var router = this;
+
+    this.$el.on('click', '.cartoon-list-item', function (event) {
+      var $p = (0, _jquery2['default'])(event.currentTarget);
+      var cartoonId = $p.data('cartoon-id');
+      router.navigate('cartoons/' + cartoonId);
+      router.showIndividualCartoon(cartoonId);
+      // back to home button
+      var backButton = (0, _jquery2['default'])('.back');
+      backButton.on('click', function (event) {
+        var $button = (0, _jquery2['default'])(event.currentTarget);
+        router.navigate('', { trigger: true });
+      });
+    });
+  },
+
+  showSpinner: function showSpinner() {
+    this.$el.html('<i class="fa fa-spinner fa-spin"></i>');
+  },
+
+  cartoonlist: function cartoonlist() {
+    var _this = this;
+
+    this.showSpinner();
+    console.log('grabbing cartoons');
+    this.cartoons.fetch().then(function () {
+
+      _this.$el.html((0, _viewsCartoon_list2['default'])(_this.cartoons.toJSON()));
+    });
+  },
+
+  showIndividualCartoon: function showIndividualCartoon(cartoonId) {
+    var _this2 = this;
+
+    console.log('show individual artists');
+    var cartoon = this.cartoons.get(cartoonId);
+
+    if (cartoon) {
+      this.$el.html((0, _viewsIndividual_view2['default'])(cartoon.toJSON()));
+    } else {
+      (function () {
+        var cartoon = _this2.cartoons.add({ objectId: cartoonId });
+        var router = _this2;
+        _this2.showSpinner();
+        cartoon.fetch().then(function () {
+          cartoon.$div.html((0, _viewsIndividual_view2['default'])(cartoon.toJSON()));
+        });
+      })();
+    }
+  },
+
+  // goBack: function(){
+  //   this.$el.on('click', '.back', function(event){
+  //     console.log("I'm being clicked");
+  //     let $el = $(event.currentTarget);
+
+  //   });
   // },
 
-  // showAbout: function() {
-
-  // }
+  start: function start() {
+    _backbone2['default'].history.start();
+  }
 
 });
 
-},{"backbone":4}],4:[function(require,module,exports){
+exports['default'] = Router;
+module.exports = exports['default'];
+
+},{"./cartoon_collection":2,"./views/cartoon_list":6,"./views/individual_view":7,"backbone":8,"jquery":9}],6:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
+function processData(data) {
+  return data.map(function (item) {
+    return '\n      <div class="cartoon-list-item" data-cartoon-id="' + item.objectId + '">\n      <img src="' + item.photo + '">\n    \n      <p>' + item.characterName + '</p>\n      <hr>\n      </div>\n      ';
+  }).join('');
+}
+
+function listTemplate(data) {
+  return '\n    <h2>Cartoon List</h2>\n    <div>' + processData(data) + '</div>\n  ';
+}
+
+exports['default'] = listTemplate;
+module.exports = exports['default'];
+
+},{}],7:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+function cartoonTemplate(data) {
+
+  return "\n    <div class=\"full-profile\">\n      <button class=\"back\"><i class=\"fa fa-arrow-left\"></i></button>\n      <h2>Cartoon Profile</h2>\n      <div><img class=\"profile\" src=\"" + data.photo + "\"></div>\n      <div><i class=\"fa fa-user\"></i>" + data.characterName + "</div>\n      <hr>\n      <div><i class=\"fa fa-chevron-right\"></i>Cartoon Title: " + data.cartoonName + "</div>\n      <hr>\n      <div><i class=\"fa fa-chevron-right\"></i>Station Name: " + data.Station + "</div>\n      <hr>\n    </div>";
+}
+
+exports["default"] = cartoonTemplate;
+module.exports = exports["default"];
+
+},{}],8:[function(require,module,exports){
 (function (global){
 //     Backbone.js 1.2.3
 
@@ -1955,7 +2150,7 @@ var Router = _backbone2['default'].router.extend({
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 
-},{"jquery":5,"underscore":7}],5:[function(require,module,exports){
+},{"jquery":9,"underscore":11}],9:[function(require,module,exports){
 /*!
  * jQuery JavaScript Library v2.1.4
  * http://jquery.com/
@@ -11167,7 +11362,7 @@ return jQuery;
 
 }));
 
-},{}],6:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 //! moment.js
 //! version : 2.10.6
 //! authors : Tim Wood, Iskren Chernev, Moment.js contributors
@@ -14363,7 +14558,7 @@ return jQuery;
     return _moment;
 
 }));
-},{}],7:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 //     Underscore.js 1.8.3
 //     http://underscorejs.org
 //     (c) 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
@@ -15913,7 +16108,7 @@ return jQuery;
   }
 }.call(this));
 
-},{}]},{},[2])
+},{}]},{},[4])
 
 
 //# sourceMappingURL=main.js.map

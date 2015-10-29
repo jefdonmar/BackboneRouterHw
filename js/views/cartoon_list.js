@@ -2,8 +2,9 @@ function processData(data) {
   return data.map(function(item) {
     return `
       <div class="cartoon-list-item" data-cartoon-id="${item.objectId}">
-      <img src="${item.Photo}">
-      <p>${item.Cartoon}</p>
+      <img src="${item.photo}">
+    
+      <p>${item.characterName}</p>
       <hr>
       </div>
       `;

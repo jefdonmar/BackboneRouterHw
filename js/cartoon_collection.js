@@ -4,7 +4,7 @@ import CartoonModel from './cartoon_model';
 
 let CartoonCollection = Backbone.Collection.extend({
 
-  url: '',
+  url: 'https://api.parse.com/1/classes/cartoonList',
 
   model: CartoonModel,
 

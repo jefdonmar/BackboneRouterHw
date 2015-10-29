@@ -1,10 +1,10 @@
 import Backbone from 'backbone'; 
 import $ from 'jquery';
-import CartoonCollection from './carton_collection';
-import listTemplate from '../views/cartoon_list';
-import artistTemplate from '../views/individual_view';
+import CartoonCollection from './cartoon_collection';
+import listTemplate from './views/cartoon_list';
+import cartoonTemplate from './views/individual_view';
 
-var Router = Backbone.router.extend({
+var Router = Backbone.Router.extend({
 
   routes: {
     '': 'cartoonlist',
@@ -14,21 +14,20 @@ var Router = Backbone.router.extend({
   initialize: function(appElement) {
     this.$el = appElement;
 
-    this.cartoon = new CartoonCollection();
+    this.cartoons = new CartoonCollection();
 
     let router = this;
 
     this.$el.on('click', '.cartoon-list-item', function(event) {
-      let $div = $(event.currentTarget);
-      let cartoonId = $div.data('cartoon-id');
+      let $p = $(event.currentTarget);
+      let cartoonId = $p.data('cartoon-id');
       router.navigate(`cartoons/${cartoonId}`);
       router.showIndividualCartoon(cartoonId);
       // back to home button
       let backButton = $('.back');
       backButton.on('click', function(event) {
-        let $div = $(event.currentTarget);
-        router.navigate(`''`);
-        router.cartoonList();
+        let $button = $(event.currentTarget);
+        router.navigate(``, {trigger: true});
       })
     });
 
@@ -40,17 +39,19 @@ var Router = Backbone.router.extend({
     );
   },
 
-  artistList: function() {
+
+  cartoonlist: function() {
     this.showSpinner();
     console.log('grabbing cartoons');
-    this.cartoons.fetch().then(function() {
+    this.cartoons.fetch().then(() => {
 
     this.$el.html(listTemplate(this.cartoons.toJSON()));
 
-    }.bind(this));
+    });
   },
 
-  showIndividualCartoon: function(artistId) {
+
+  showIndividualCartoon: function(cartoonId) {
     console.log('show individual artists');
     let cartoon = this.cartoons.get(cartoonId);
     
@@ -61,10 +62,18 @@ var Router = Backbone.router.extend({
       let router = this;
       this.showSpinner();
       cartoon.fetch().then(function () {
-        cartoon.$el.html(cartoonTemplate(cartoon.toJSON()));
+        cartoon.$div.html(cartoonTemplate(cartoon.toJSON()));
       });
     }
   },
+
+// goBack: function(){
+//   this.$el.on('click', '.back', function(event){
+//     console.log("I'm being clicked");
+//     let $el = $(event.currentTarget);
+
+//   });
+// },
 
   start: function() {
     Backbone.history.start();

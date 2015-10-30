@@ -2019,6 +2019,49 @@
   content: ""; }
 
 body {
-  background: #e2ebf3; }
+  background: #e2ebf3;
+  font-family: "Inconsolata"; }
+  body h2 {
+    margin-left: 5%;
+    border: 1px solid grey;
+    max-width: 30%;
+    padding: 5px; }
+  body img {
+    width: 75px;
+    height: 75px;
+    border-radius: 5px;
+    padding: 3px; }
+  body .cartoon-list-item {
+    max-width: 30%;
+    margin-left: 5%;
+    font-size: 18px; }
+  body p {
+    padding: 5px;
+    display: inline-block;
+    margin: 0; }
+  body .full-profile {
+    max-width: 30%;
+    margin-left: 3%;
+    margin-top: 1%;
+    padding: 10px; }
+  body .full-profile h2 {
+    text-align: center;
+    display: inline;
+    max-width: 30%; }
+  body button {
+    background-color: white;
+    border: none;
+    padding: 5px; }
+  body .profile {
+    width: 300px;
+    height: 300px;
+    border-radius: 10px;
+    border: 1px solid black;
+    margin-left: 11%;
+    margin-bottom: 15px;
+    margin-top: 5%; }
+  body .fa {
+    padding: 5px;
+    color: black; }
 
 /*# sourceMappingURL=main.css.map */

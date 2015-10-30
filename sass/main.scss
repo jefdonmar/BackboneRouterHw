@@ -3,4 +3,68 @@
 
 body {
   background: #e2ebf3;
+  font-family: 'Inconsolata', ;
+
+  h2{
+    margin-left: 5%;
+    border: 1px solid grey;
+    max-width: 30%;
+    padding: 5px;
+  }
+
+  img {
+    width: 75px;
+    height: 75px;
+    border-radius: 5px;
+    padding: 3px;
+  }
+
+
+  .cartoon-list-item {
+    max-width: 30%;
+    margin-left: 5%;
+    font-size: 18px;
+  }
+
+  p {
+    padding: 5px;
+    display: inline-block;
+    margin: 0;
+  }
+
+  .full-profile{
+    max-width: 30%;
+    margin-left: 3%;
+    margin-top: 1%;
+    padding: 10px;
+
+  }
+
+  .full-profile h2 {
+    text-align: center;
+    display: inline;
+    max-width: 30%;
+  }
+
+  button {
+    background-color: white;
+    border: none;
+    padding: 5px;
+  }
+
+  .profile {
+    width: 300px;
+    height: 300px;
+    border-radius: 10px;
+    border: 1px solid black;
+    margin-left: 11%;
+    margin-bottom: 15px;
+    margin-top: 5%;
+  }
+  
+  .fa {
+    padding: 5px;
+    color: black;
+  }
+
 }

@@ -102,8 +102,6 @@ var _cartoon_collection = require('./cartoon_collection');
 
 var _cartoon_collection2 = _interopRequireDefault(_cartoon_collection);
 
-console.log('Hello, World');
-
 var appElement = (0, _jquery2['default'])('.app');
 
 var router = new _router2['default'](appElement);
@@ -153,21 +151,22 @@ var Router = _backbone2['default'].Router.extend({
     var router = this;
 
     this.$el.on('click', '.cartoon-list-item', function (event) {
-      var $p = (0, _jquery2['default'])(event.currentTarget);
-      var cartoonId = $p.data('cartoon-id');
-      router.navigate('cartoons/' + cartoonId);
+      var $cartoon = (0, _jquery2['default'])(event.currentTarget);
+      var cartoonId = $cartoon.data('cartoon-id');
+      router.navigate(' /cartoons/' + cartoonId);
       router.showIndividualCartoon(cartoonId);
       // back to home button
-      var backButton = (0, _jquery2['default'])('.back');
-      backButton.on('click', function (event) {
+      var backBut = (0, _jquery2['default'])('.back');
+      backBut.on('click', '.back', function (event) {
         var $button = (0, _jquery2['default'])(event.currentTarget);
-        router.navigate('', { trigger: true });
+        router.navigate(' /\'\'');
+        router.cartoonlist();
       });
     });
   },
 
   showSpinner: function showSpinner() {
-    this.$el.html('<i class="fa fa-spinner fa-spin"></i>');
+    this.$el.html();
   },
 
   cartoonlist: function cartoonlist() {
@@ -200,14 +199,6 @@ var Router = _backbone2['default'].Router.extend({
       })();
     }
   },
-
-  // goBack: function(){
-  //   this.$el.on('click', '.back', function(event){
-  //     console.log("I'm being clicked");
-  //     let $el = $(event.currentTarget);
-
-  //   });
-  // },
 
   start: function start() {
     _backbone2['default'].history.start();
@@ -245,7 +236,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 function cartoonTemplate(data) {
 
-  return "\n    <div class=\"full-profile\">\n      <button class=\"back\"><i class=\"fa fa-arrow-left\"></i></button>\n      <h2>Cartoon Profile</h2>\n      <div><img class=\"profile\" src=\"" + data.photo + "\"></div>\n      <div><i class=\"fa fa-user\"></i>" + data.characterName + "</div>\n      <hr>\n      <div><i class=\"fa fa-chevron-right\"></i>Cartoon Title: " + data.cartoonName + "</div>\n      <hr>\n      <div><i class=\"fa fa-chevron-right\"></i>Station Name: " + data.Station + "</div>\n      <hr>\n    </div>";
+  return "\n    <div class=\"full-profile\">\n      <button class=\"back\"><i class=\"fa fa-arrow-left\"></i></button>\n      <h2>Cartoon Profile</h2>\n      <div><img class=\"profile\" src=\"" + data.photo + "\"></div>\n      <div>" + data.characterName + "</div>\n      <hr>\n      <div>Cartoon Title: " + data.cartoonName + "</div>\n      <hr>\n      <div><Station Name: " + data.Station + "</div>\n      <hr>\n    </div>";
 }
 
 exports["default"] = cartoonTemplate;

@@ -19,24 +19,23 @@ var Router = Backbone.Router.extend({
     let router = this;
 
     this.$el.on('click', '.cartoon-list-item', function(event) {
-      let $p = $(event.currentTarget);
-      let cartoonId = $p.data('cartoon-id');
-      router.navigate(`cartoons/${cartoonId}`);
+      let $cartoon = $(event.currentTarget);
+      let cartoonId = $cartoon.data('cartoon-id');
+      router.navigate(` /cartoons/${cartoonId}`);
       router.showIndividualCartoon(cartoonId);
       // back to home button
-      let backButton = $('.back');
-      backButton.on('click', function(event) {
+      let backBut = $('.back')
+      backBut.on('click', '.back', function(event) {
         let $button = $(event.currentTarget);
-        router.navigate(``, {trigger: true});
+        router.navigate(` /''`);
+        router.cartoonlist();
       })
     });
 
   },
 
   showSpinner: function() {
-    this.$el.html(
-      '<i class="fa fa-spinner fa-spin"></i>'
-    );
+    this.$el.html();
   },
 
 
@@ -67,13 +66,6 @@ var Router = Backbone.Router.extend({
     }
   },
 
-// goBack: function(){
-//   this.$el.on('click', '.back', function(event){
-//     console.log("I'm being clicked");
-//     let $el = $(event.currentTarget);
-
-//   });
-// },
 
   start: function() {
     Backbone.history.start();

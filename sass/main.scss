@@ -3,7 +3,12 @@
 
 body {
   background: #e2ebf3;
-  font-family: 'Inconsolata', ;
+  max-width: 800px;
+
+
+  .app {
+    margin-right: 30%;
+  }
 
   h2{
     margin-left: 5%;
@@ -33,10 +38,11 @@ body {
   }
 
   .full-profile{
-    max-width: 30%;
+    max-width: 50%;
     margin-left: 3%;
     margin-top: 1%;
     padding: 10px;
+    font-weight: bold;
 
   }
 
@@ -47,7 +53,7 @@ body {
   }
 
   button {
-    background-color: white;
+    background-color: yellow;
     border: none;
     padding: 5px;
   }

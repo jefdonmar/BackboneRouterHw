@@ -153,13 +153,13 @@ var Router = _backbone2['default'].Router.extend({
     this.$el.on('click', '.cartoon-list-item', function (event) {
       var $cartoon = (0, _jquery2['default'])(event.currentTarget);
       var cartoonId = $cartoon.data('cartoon-id');
-      router.navigate(' /cartoons/' + cartoonId);
+      router.navigate('/cartoons/' + cartoonId);
       router.showIndividualCartoon(cartoonId);
       // back to home button
       var backBut = (0, _jquery2['default'])('.back');
-      backBut.on('click', '.back', function (event) {
+      backBut.on('click', function (event) {
         var $button = (0, _jquery2['default'])(event.currentTarget);
-        router.navigate(' /\'\'');
+        router.navigate('');
         router.cartoonlist();
       });
     });
@@ -172,8 +172,6 @@ var Router = _backbone2['default'].Router.extend({
   cartoonlist: function cartoonlist() {
     var _this = this;
 
-    this.showSpinner();
-    console.log('grabbing cartoons');
     this.cartoons.fetch().then(function () {
 
       _this.$el.html((0, _viewsCartoon_list2['default'])(_this.cartoons.toJSON()));
@@ -183,18 +181,16 @@ var Router = _backbone2['default'].Router.extend({
   showIndividualCartoon: function showIndividualCartoon(cartoonId) {
     var _this2 = this;
 
-    console.log('show individual artists');
     var cartoon = this.cartoons.get(cartoonId);
 
     if (cartoon) {
       this.$el.html((0, _viewsIndividual_view2['default'])(cartoon.toJSON()));
     } else {
       (function () {
-        var cartoon = _this2.cartoons.add({ objectId: cartoonId });
         var router = _this2;
-        _this2.showSpinner();
+        cartoon = _this2.cartoons.add({ objectId: cartoonId });
         cartoon.fetch().then(function () {
-          cartoon.$div.html((0, _viewsIndividual_view2['default'])(cartoon.toJSON()));
+          router.$el.html((0, _viewsIndividual_view2['default'])(cartoon.toJSON()));
         });
       })();
     }

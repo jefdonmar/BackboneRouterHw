@@ -21,13 +21,13 @@ var Router = Backbone.Router.extend({
     this.$el.on('click', '.cartoon-list-item', function(event) {
       let $cartoon = $(event.currentTarget);
       let cartoonId = $cartoon.data('cartoon-id');
-      router.navigate(` /cartoons/${cartoonId}`);
+      router.navigate(`/cartoons/${cartoonId}`);
       router.showIndividualCartoon(cartoonId);
       // back to home button
       let backBut = $('.back')
-      backBut.on('click', '.back', function(event) {
+      backBut.on('click', function(event) {
         let $button = $(event.currentTarget);
-        router.navigate(` /''`);
+        router.navigate(``);
         router.cartoonlist();
       })
     });
@@ -40,8 +40,6 @@ var Router = Backbone.Router.extend({
 
 
   cartoonlist: function() {
-    this.showSpinner();
-    console.log('grabbing cartoons');
     this.cartoons.fetch().then(() => {
 
     this.$el.html(listTemplate(this.cartoons.toJSON()));
@@ -51,21 +49,18 @@ var Router = Backbone.Router.extend({
 
 
   showIndividualCartoon: function(cartoonId) {
-    console.log('show individual artists');
     let cartoon = this.cartoons.get(cartoonId);
     
     if (cartoon) {
       this.$el.html(cartoonTemplate(cartoon.toJSON()));  
     } else {
-      let cartoon = this.cartoons.add({objectId: cartoonId});
       let router = this;
-      this.showSpinner();
+      cartoon = this.cartoons.add({objectId: cartoonId});
       cartoon.fetch().then(function () {
-        cartoon.$div.html(cartoonTemplate(cartoon.toJSON()));
+        router.$el.html(cartoonTemplate(cartoon.toJSON()));
       });
     }
   },
-
 
   start: function() {
     Backbone.history.start();

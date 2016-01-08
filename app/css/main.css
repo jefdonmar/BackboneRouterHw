@@ -2020,7 +2020,9 @@
 
 body {
   background: #e2ebf3;
-  font-family: "Inconsolata"; }
+  max-width: 800px; }
+  body .app {
+    margin-right: 30%; }
   body h2 {
     margin-left: 5%;
     border: 1px solid grey;
@@ -2040,16 +2042,17 @@ body {
     display: inline-block;
     margin: 0; }
   body .full-profile {
-    max-width: 30%;
+    max-width: 50%;
     margin-left: 3%;
     margin-top: 1%;
-    padding: 10px; }
+    padding: 10px;
+    font-weight: bold; }
   body .full-profile h2 {
     text-align: center;
     display: inline;
     max-width: 30%; }
   body button {
-    background-color: white;
+    background-color: yellow;
     border: none;
     padding: 5px; }
   body .profile {
